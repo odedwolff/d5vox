@@ -3,7 +3,7 @@ var express = require('express');
 
 //Set up mongoose connection
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb+srv://shaady100:Pass1001@cluster0-69y6r.mongodb.net/productsTut?retryWrites=true&w=majority';
+var mongoDB = 'mongodb+srv://shaady100:Pass1001@cluster0-69y6r.mongodb.net/d5?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

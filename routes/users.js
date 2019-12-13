@@ -17,6 +17,7 @@ router.get('/register_old', user_controller.register_user);
 
 router.get('/register', user_controller.user_register_get); 
 
+router.post('/register', user_controller.user_register_post); 
 
 
 module.exports = router;
