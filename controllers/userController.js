@@ -1,6 +1,6 @@
 var User = require('../models/user');
 const validator = require('express-validator');
-
+var passwordHash = require('password-hash');
 
 exports.register_user = function(req, res) {
     res.send('NOT IMPLEMENTED: register user');
@@ -34,7 +34,7 @@ exports.user_register_post = [
 
 			// Create a genre object with escaped and trimmed data.
 			var user = new User(
-			  { user_name: req.body.user, hash_password:req.body.password}
+			  { user_name: req.body.user, hash_password: passwordHash.generate(req.body.password)}
 			);
 
 			if (!errors.isEmpty()) {
