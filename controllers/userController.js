@@ -1,6 +1,7 @@
 var User = require('../models/user');
 const validator = require('express-validator');
 var passwordHash = require('password-hash');
+var utils = require('../utils/d5utils');
 
 exports.register_user = function(req, res) {
     res.send('NOT IMPLEMENTED: register user');
@@ -57,9 +58,15 @@ exports.user_register_post = [
 				   }
 				   else 
 				   {
+					
+					//reply with a session cookie- log the new user on 
+					const sessionIdCookie = utils.generateSessionIdCookie(req.body.user);  
+					   
 					 user.save(function (err) {
 						if (err) { return next(err); }
-						res.send("new user added");
+						//res.send("new user added");
+						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: true });
+						res.render("action_feedback", {message:"New User Saved"});
 						});
 				   }
 
