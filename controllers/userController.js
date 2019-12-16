@@ -61,8 +61,9 @@ exports.user_register_post = [
 					
 					//reply with a session cookie- log the new user on 
 					const sessionIdCookie = utils.generateSessionIdCookie(req.body.user);  
-					   
-					 user.save(function (err) {
+					user.active_session_id=sessionIdCookie;
+					
+					user.save(function (err) {
 						if (err) { return next(err); }
 						//res.send("new user added");
 						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: true });
