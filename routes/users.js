@@ -9,7 +9,10 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/login', user_controller.login_user);
+router.get('/login', user_controller.login_user_get);
+
+router.post('/login', user_controller.login_user_post);
+
 
 //just for testing stuff 
 router.get('/register_old', user_controller.register_user);
