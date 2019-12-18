@@ -25,7 +25,7 @@ exports.login_user_post = [
 
 	(req, res, next) => 
 		{
-
+			var sessionIdCookie;
 			// Extract the validation errors from a request.
 			const errors = validator.validationResult(req);
 
@@ -41,46 +41,49 @@ exports.login_user_post = [
 			}
 			else 
 			{
-				  // chech whether username is in use
-				  User.findOne({ 'user_name': req.body.user}, function(err, found_usr) 
-				  {
-					   if (err)
-					   { 
-							console.log("error while searching user");
-							return next(err); 
-					   }
-					   if (found_usr)
-					   {
-							const reqPass=req.body.password;
-							const savedPasHash=found_usr.hash_password;
-							console.log("given pass, hash=( " + reqPass + "," + savedPasHash + ")" );
-							const passwordmatch=passwordHash.verify(reqPass,savedPasHash);
-							if(passwordmatch){
-								const sessionIdCookie = utils.generateSessionIdCookie(req.body.user);  
-								found_usr.update({active_session_id: sessionIdCookie} ,(err, doc)=>
-									{
-										if(err){
-											console.log("error while updating user");
-											return next(err)
-										}else{
-											res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: true });
-											res.render("action_feedback", {message:"Logon done"});
-										}
-									}
-								);
-									
-							}else{
-								console.log("password don't match")
-								res.render("action_feedback", {message:"password don't match"});
-							}
-						}else{
-							console.log("user not found");
+				// chech whether username is in use
+				User.findOne({ 'user_name': req.body.user}).
+				then(
+					function (foundOne){
+						 //user not found
+						 if(foundOne==null){
 							res.render("action_feedback", {message:"user not found"});
+							return null;
+						 }
+						  //compare passwords
+						const reqPass=req.body.password;
+						const savedPasHash=foundOne.hash_password;
+						const passwordmatch=passwordHash.verify(reqPass,savedPasHash);
+						if(!passwordmatch){
+							res.render("action_feedback", {message:"password don't match"});
+							return null;
 						}
-					   
-					
-				});
-			}
+						sessionIdCookie = utils.generateSessionIdCookie(req.body.user);  
+						console.log("sessionIdCookie=" + sessionIdCookie);
+						
+						//return foundOne.update({active_session_id: sessionIdCookie})
+						foundOne.active_session_id=sessionIdCookie;
+						return foundOne.save(); 
+					  
+					},
+					function(err){
+						console.log("error=" + err);
+						res.render("action_feedback", {message:"error on user search"});
+					}
+				).then(
+					function(args){
+						if(args==null){
+							return;
+						}
+						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: true });
+						res.render("action_feedback", {message:"updated objects, callback sent args" + args});
+					},
+					function(err){
+						res.render("action_feedback", {message:"error on object update" + err});
+					}
+				);
+			}	  
+				  
 		}
 ]
 
