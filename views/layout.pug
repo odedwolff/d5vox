@@ -7,11 +7,23 @@ html(lang='en')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')    
+    
+    script(src='../javascripts/manage_user.js')
+
   body
     div(class='container-fluid')
       div(class='row')
         div(class='col-sm-2')
+          div(id=userPanel)
+            label (id=lablUser)user place holder
+            div(id=loggedIn)
+              ul(class='sidebar-nav')
+                li
+                    a(href='/users/login') log in
+                li
+                    a(href='/users/register') sign up
+            div(id=loggedOut)
           block sidebar
             ul(class='sidebar-nav')
               li 

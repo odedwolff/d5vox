@@ -75,7 +75,7 @@ exports.login_user_post = [
 						if(args==null){
 							return;
 						}
-						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: true });
+						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: false });
 						res.render("action_feedback", {message:"updated objects, callback sent args" + args});
 					},
 					function(err){
@@ -141,7 +141,7 @@ exports.user_register_post = [
 					user.save(function (err) {
 						if (err) { return next(err); }
 						//res.send("new user added");
-						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: true });
+						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: false });
 						res.render("action_feedback", {message:"New User Saved"});
 						});
 				   }
