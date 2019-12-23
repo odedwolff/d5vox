@@ -17,13 +17,14 @@ html(lang='en')
         div(class='col-sm-2')
           div(id=userPanel)
             label (id=lablUser)user place holder
-            div(id=loggedIn)
+            div(id=loggedOut)
               ul(class='sidebar-nav')
                 li
                     a(href='/users/login') log in
                 li
                     a(href='/users/register') sign up
-            div(id=loggedOut)
+            div(id=loggedIn)
+                    button(onclick="sendLogOut()") log out
           block sidebar
             ul(class='sidebar-nav')
               li 

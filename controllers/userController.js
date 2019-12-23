@@ -152,3 +152,98 @@ exports.user_register_post = [
 ]
 
 
+exports.user_logout_post_old= function(req, res)
+{
+	 //const jsData = JSON.stringify(req.body);
+	 const jsData=req.body;
+	 //console.log("request json data:" + jsData);
+	 const sessionId = jsData["session_id"];
+	 console.log("request session id:" + sessionId);
+	 User.findOne({ 'active_session_id': sessionId }) 
+	 .then(
+		function(foundOne){
+			if(foundOne==null){
+				console.log("no user found");
+				res.render("action_feedback", {message:"session id not found"});
+				return null; 
+			}
+			
+			foundOne.active_session_id=null;
+			return foundOne.save();
+		
+		},
+		function(err){
+			console.log(err);
+		}
+	 ).then(
+		function(dat){
+			// if(dat==null){
+				// return;
+			// }
+			// console.log("redering.....");
+			// res.render("action_feedback", {message:"user logged out"});
+			data = {success:true};
+			res.writeHead(200, { 'Content-Type': 'application/json' }); 
+			res.end(JSON.stringify(data));
+		}
+		, 
+		function(err){
+			console.log(err);
+		}
+	 
+	 );
+	 
+}
+
+
+
+
+
+exports.user_logout_post= function(req, res)
+{
+	 
+	 //const sessionId = jsData["session_id"];
+	 const sessionId=req.cookies['sessionId'];
+	 if(!sessionId){
+			const msg = 'session id cookie not present';
+			console.log(msg);
+			return res.status(400).send({
+			message: msg
+		});
+	 }
+	 console.log("request session id:" + sessionId);
+	 User.findOne
+		(
+			{ 'active_session_id': sessionId }, function(err, foundOne){
+				 if(err){
+					const msg= 'error on database search' + err;
+					console.log(msg);
+					return res.status(304).send({message:msg});
+				 }
+				 if(!foundOne)
+					 {
+						const msg= 'no user found with session id ' + sessionId;
+						console.log(msg);
+						return res.status(304).send({message:msg});
+					 }
+				 //delete cookie field form user database entry
+				foundOne.active_session_id=null;
+				foundOne.save(function(err){
+					if(err)
+					{
+						const msg= 'error udpating database';
+						console.log(msg);	
+						return res.status(304).send({message: msg});
+					}
+					const msg= "user logged out";
+					console.log(msg);	
+					//maek cookie expire in order to delete it 
+					res.cookie('sessionId',"ddd", { expires: new Date(0), httpOnly: false });
+					res.render("action_feedback", {message:msg});
+				});
+			
+			}
+		)
+}
+
+
