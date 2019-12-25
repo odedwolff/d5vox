@@ -15,6 +15,8 @@ html(lang='en')
     div(class='container-fluid')
       div(class='row')
         div(class='col-sm-2')
+          div(id=divHome)
+            a(href='/') home
           div(id=userPanel)
             div(id='divLoggedOut')
               ul(class='sidebar-nav')
@@ -23,8 +25,11 @@ html(lang='en')
                 li
                     a(href='/users/register') sign up
             div(id='divLoggedIn')
-                    label(id='lablUser') user place holder
-                    button(onclick="sendLogOut()") log out
+              ul(class='sidebar-nav')
+                li
+                  label(id='lablUser') user place holder
+                li
+                  button(onclick="sendLogOut()") log out
           block sidebar
             ul(class='sidebar-nav')
               li 

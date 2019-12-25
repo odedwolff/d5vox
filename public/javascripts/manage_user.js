@@ -15,6 +15,10 @@ function setPanelUserLoggedOut(){
 
 function initDoc(){
 	console.log("initDoc()");
+	updateLoginStatus();
+}
+
+function updateLoginStatus(){
 	console.log("cookies=" + document.cookie);
 	const sessionCookie=getCookie('sessionId');
 	if(sessionCookie){
@@ -26,40 +30,13 @@ function initDoc(){
 }
 
 
-
-//reads cookie and sends it expicetly...not necessery i guess 
-
-function sendLogOutOld(){
-	const sessionId = getCookie('sessionId');
-	if(!sessionId){
-		console.log('no session id cookie set');
-		return; 
-	}
-	console.log("session id=" + sessionId);
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/users/logout');
-	xhr.setRequestHeader('Content-Type', 'application/json');
-	xhr.onload = function() {
-		if (xhr.status === 200) {
-			var data = JSON.parse(xhr.responseText);
-			//console.log("resonpnse data success code:" + data{});
-			const success = data["success"];
-			if(success){
-				setCook
-			}
-		}
-	};
-	xhr.send(JSON.stringify({
-		session_id: sessionId
-	}));
-	
-}
-
 function sendLogOut(){
 	const url= '/users/logout';
 	fetch(url, {method: 'POST'}).
 	then(
-		(res)=>{console.log("resulst from logout" + res);}
+		(res)=>{console.log("resulst from logout" + res);
+		updateLoginStatus();		
+		}
 	)
 }
 

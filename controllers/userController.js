@@ -8,7 +8,6 @@ exports.register_user = function(req, res) {
 };
 
 
-
 exports.login_user_get = function(req, res, next) {     
   res.render('user_login', {title:"Enter User Details"} );
 };
@@ -77,7 +76,8 @@ exports.login_user_post = [
 						}
 						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: false });
 						res.cookie('loggedUserName',req.body.user, { maxAge: 900000, httpOnly: false });
-						res.render("action_feedback", {message:"updated objects, callback sent args" + args});
+						res.render("action_feedback", {message:"logged on, welcome"});
+						//res.json({key1:"val1"});
 					},
 					function(err){
 						res.render("action_feedback", {message:"error on object update" + err});
@@ -152,52 +152,6 @@ exports.user_register_post = [
 			}
 		}
 ]
-
-
-exports.user_logout_post_old= function(req, res)
-{
-	 //const jsData = JSON.stringify(req.body);
-	 const jsData=req.body;
-	 //console.log("request json data:" + jsData);
-	 const sessionId = jsData["session_id"];
-	 console.log("request session id:" + sessionId);
-	 User.findOne({ 'active_session_id': sessionId }) 
-	 .then(
-		function(foundOne){
-			if(foundOne==null){
-				console.log("no user found");
-				res.render("action_feedback", {message:"session id not found"});
-				return null; 
-			}
-			
-			foundOne.active_session_id=null;
-			return foundOne.save();
-		
-		},
-		function(err){
-			console.log(err);
-		}
-	 ).then(
-		function(dat){
-			// if(dat==null){
-				// return;
-			// }
-			// console.log("redering.....");
-			// res.render("action_feedback", {message:"user logged out"});
-			data = {success:true};
-			res.writeHead(200, { 'Content-Type': 'application/json' }); 
-			res.end(JSON.stringify(data));
-		}
-		, 
-		function(err){
-			console.log(err);
-		}
-	 
-	 );
-	 
-}
-
-
 
 
 
