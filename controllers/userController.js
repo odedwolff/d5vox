@@ -76,6 +76,7 @@ exports.login_user_post = [
 							return;
 						}
 						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: false });
+						res.cookie('loggedUserName',req.body.user, { maxAge: 900000, httpOnly: false });
 						res.render("action_feedback", {message:"updated objects, callback sent args" + args});
 					},
 					function(err){
@@ -142,6 +143,7 @@ exports.user_register_post = [
 						if (err) { return next(err); }
 						//res.send("new user added");
 						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: false });
+						res.cookie('loggedUserName',req.body.user, { maxAge: 900000, httpOnly: false });
 						res.render("action_feedback", {message:"New User Saved"});
 						});
 				   }
@@ -238,7 +240,8 @@ exports.user_logout_post= function(req, res)
 					const msg= "user logged out";
 					console.log(msg);	
 					//maek cookie expire in order to delete it 
-					res.cookie('sessionId',"ddd", { expires: new Date(0), httpOnly: false });
+					res.cookie('sessionId',"", { expires: new Date(0), httpOnly: false });
+					res.cookie('loggedUserName',"", { expires: new Date(0), httpOnly: false });
 					res.render("action_feedback", {message:msg});
 				});
 			

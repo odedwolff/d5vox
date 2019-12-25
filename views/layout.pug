@@ -11,19 +11,19 @@ html(lang='en')
     
     script(src='../javascripts/manage_user.js')
 
-  body
+  body(onload="initDoc()")
     div(class='container-fluid')
       div(class='row')
         div(class='col-sm-2')
           div(id=userPanel)
-            label (id=lablUser)user place holder
-            div(id=loggedOut)
+            div(id='divLoggedOut')
               ul(class='sidebar-nav')
                 li
                     a(href='/users/login') log in
                 li
                     a(href='/users/register') sign up
-            div(id=loggedIn)
+            div(id='divLoggedIn')
+                    label(id='lablUser') user place holder
                     button(onclick="sendLogOut()") log out
           block sidebar
             ul(class='sidebar-nav')

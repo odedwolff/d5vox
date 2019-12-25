@@ -1,6 +1,32 @@
 console.log("welcome to the jungle");
 
 
+
+function setPanelUserLoggedIn(userName){
+	document.getElementById("lablUser").innerHTML  = userName;
+	document.getElementById("divLoggedIn").style.display="";
+	document.getElementById("divLoggedOut").style.display="none";
+}
+
+function setPanelUserLoggedOut(){
+	document.getElementById("divLoggedIn").style.display="none";
+	document.getElementById("divLoggedOut").style.display="";
+}
+
+function initDoc(){
+	console.log("initDoc()");
+	console.log("cookies=" + document.cookie);
+	const sessionCookie=getCookie('sessionId');
+	if(sessionCookie){
+		const loggedUserName=getCookie('loggedUserName');
+		setPanelUserLoggedIn(loggedUserName);
+	}else{
+		setPanelUserLoggedOut();
+	}
+}
+
+
+
 //reads cookie and sends it expicetly...not necessery i guess 
 
 function sendLogOutOld(){
@@ -54,3 +80,5 @@ function getCookie(cname) {
   }
   return "";
 }
+
+
