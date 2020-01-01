@@ -114,7 +114,7 @@ function populate2(){
 		word = new Word({
 			word: "word2", 
 			language: language, 
-			tags: ['tag1','tag2','tag3'],
+			tags: 'tag1;tag2;tag3',
 			weight:0.45, 
 			transTextByLang:{
 					// IT:```word2 in italian
@@ -175,6 +175,11 @@ function populate2(){
 			console.log("error saving userstat " + err);
 			process.exit(0);
 		})
+}
+
+
+function poplateWords(){
+	
 }
 
 

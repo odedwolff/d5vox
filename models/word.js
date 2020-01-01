@@ -7,11 +7,13 @@ var WordSchema = new Schema({
 	//TBD- change to reference
 	language: {type: Schema.Types.ObjectId, ref: 'Language', required: false},
 	weight: {type: Number},
+	//each values is a string contiain 1 or more translations (porbably spereated by new line)
 	transTextByLang: {
 		type: Map,
 		of: String
 	},
-	tags: [String]
+	//a string holding one or more tags seperated by semicolons (?)
+	tags: String
 });
 
 
