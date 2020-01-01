@@ -111,7 +111,21 @@ function populate2(){
 		return user.save(); 
 	}
 	var saveWord = ()=>{
-		word = new Word({word: "word2", language: language, tags: ['tag1','tag2','tag3']});
+		word = new Word({
+			word: "word2", 
+			language: language, 
+			tags: ['tag1','tag2','tag3'],
+			weight:0.45, 
+			transTextByLang:{
+					// IT:```word2 in italian
+						// another translation of words2 in italian
+					// ```,
+					IT:'word2 in italian \n word2 in italian another translation',
+					FR:'word2 in french'
+			}
+		
+		});
+		
 		return word.save();
 	}
 	var saveUserStat= ()=>{
@@ -131,7 +145,7 @@ function populate2(){
 			return saveUser();
 		},
 		(err)=>{
-			console.log("error saving language" + err);
+			console.log("error saving language " + err);
 			return saveUser();
 		}).
 	then(
@@ -140,7 +154,7 @@ function populate2(){
 			return saveWord();
 		},
 		(err)=>{
-			console.log("error saving user" + err);
+			console.log("error saving user " + err);
 			return saveWord();
 		}).
 	then(
@@ -149,7 +163,7 @@ function populate2(){
 			return saveUserStat();
 		},
 		(err)=>{
-			console.log("error saving word" + err);
+			console.log("error saving word " + err);
 			return saveUserStat();
 		}).
 	then(
@@ -158,7 +172,7 @@ function populate2(){
 			process.exit(0);
 		},
 		(err)=>{
-			console.log("error saving userstat" + err);
+			console.log("error saving userstat " + err);
 			process.exit(0);
 		})
 }
