@@ -179,6 +179,53 @@ function populate2(){
 
 
 function poplateWords(){
+	const nmWords = 20;
+	
+	
+	//first saved then referred language 
+	var lang1 = new Language({dislpayName:"Hindi",speechEngingCode: "HI"});
+	lang1.save()
+	.then(
+		function(dat){
+			console.log("language saved");
+			var words = [];
+			for(var i=0;i<nmWords;i++)
+			{
+				word = new Word({
+						word: "word" + i,
+						language: lang1, 
+						tags: 'tag1;tag2;tag3',
+						weight:Math.random(),
+						transTextByLang:{
+								// IT:```word2 in italian
+									// another translation of words2 in italian
+								// ```,
+								IT:'word' + i + 'in italian \n word' + i + ' in italian another translation',
+								FR:'word' + i + ' in french'
+						}
+					
+				});
+				words.push(word);
+			}
+			return Word.collection.insert(words);
+		},
+		function(err){
+			console.log("error saving language" + err);
+			process.exit(1);
+		}
+	).then(
+		function(){
+			console.log("words batch saved");
+			process.exit(0);
+			
+		},
+		function(err){
+			console.log("error saving words batch " + err);
+			process.exit(1);
+		}
+	)
+
+	
 	
 }
 
@@ -191,6 +238,8 @@ function logError(err){
 //test1();
 //emptyCollections();
 //populate2();
+//emptyCollections(populate2);
 
-emptyCollections(populate2);
+emptyCollections(poplateWords);
+
 
