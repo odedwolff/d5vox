@@ -3,6 +3,8 @@ var Language = require('../models/language');
 var Word = require('../models/word');
 var UserStat = require('../models/userstat');
 var User = require('../models/user');
+var appLogic = require('../app_logic/appLogic');
+var async = require('async');
 
 var url='mongodb+srv://shaady100:Pass1001@cluster0-69y6r.mongodb.net/d5?retryWrites=true&w=majority';
 
@@ -25,7 +27,7 @@ function emptyCollections(next){
 		};
 	}
 	
-	db.dropCollection('languages')
+	return db.dropCollection('languages')
 	.then(
 		function(){
 			console.log("languages colleciton deleted");
@@ -55,10 +57,26 @@ function emptyCollections(next){
 	).then(function(){
 			console.log("userstats colleciton deleted");
 			leave(next);
+			if(next){
+				next();
+			}else{
+					return new Promise(function (res,rej){
+						res();
+					}
+				)	
+			}
 		},
 		function(err){
 			console.log("error at deleting userstats colleciton: " + err);
-			leave(next);
+			if(next){
+				leave(next);
+			}else{
+				//"errors" at this stage is also attempting to delete empty, 
+				//which is not an error AFAIAC
+				return new Promise(function (res,rej){
+						res();
+				});
+			}
 		}
 	)
 }
@@ -230,9 +248,113 @@ function poplateWords(){
 }
 
 
+
+
+
+function testPrepInsertUserStat(userName, lngSymbol, nullProb){
+	var loadedLang;
+	async.series(
+		[
+			
+			// function(){
+				// Language.findOne({speechEngingCode:lngSymbol}).then(
+			// (found)=>{loadedLang=found;}
+					// ,logError
+				// )
+			// },
+			
+			//create referred user and language 
+			// function(){
+				// async.parallel(){
+					
+				// }
+			// },
+			
+			//find relevant words 
+			function(){
+				async.parallel(
+					{
+						findUser:function(){
+							User.find({user_name:userName}, callback(foundUsers));
+						},
+						findWord: function(){
+							//Word.find({language.speechEngingCode:lngSymbol}, callback(foundWords));
+							db.Word.aggregate(
+							  {$unwind: "$languages"},
+							  {$lookup: {
+								from:"languages",
+								localField: "language",
+								foreignField: "_id",
+								as: "language"
+
+							   }},
+							   {$match: {
+								"language.speechEngingCode": "HI"
+							   }},
+							   function(){
+								   callback(foundWords);
+							   }
+							  )
+						}
+					
+					},
+					function(err, results){
+						if(err){
+							console.log(err);
+							process.exit(0);
+						}
+						console.log(results);
+						process.exit(0);
+					}
+				);
+				
+			}
+		
+		],
+		(err, results)=>{
+			if(err){
+				console.log("error at loading lang " + err);
+				process.exit(0);
+			}
+		}
+	
+	);
+
+}
+
+function logErr(msg){
+	console.log("Error" + msg);
+}
+
+function prepareDB4UserStatTesting(emptyFirst){
+	// async.series([
+		// emptyCollections.bind(null,function(){callback("empty collctions done")),
+		//save user
+		// function(){
+			// var user = new User({user_name: "test user 2", hash_password:"fake_hash_33asdf234dsf324"});
+			// user.save()
+			// .then(function (info){callback(info)}, logErr);
+		// },
+		
+		// function 
+	// ]
+		
+	// )	
+	if(emptyFirst){
+		emptyCollections(null).
+		then(function(){console.log("then post empty");});
+	}
+	
+}
+
+
+
+
 function logError(err){
 	console.log(err);
 }
+
+
 
 
 //test1();
@@ -240,6 +362,11 @@ function logError(err){
 //populate2();
 //emptyCollections(populate2);
 
-emptyCollections(poplateWords);
+//emptyCollections(poplateWords);
+//appLogic.test1();
+
+//testPrepInsertUserStat();
+
+prepareDB4UserStatTesting(true);
 
 
