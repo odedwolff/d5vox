@@ -10,8 +10,7 @@ var url='mongodb+srv://shaady100:Pass1001@cluster0-69y6r.mongodb.net/d5?retryWri
 
 var mongoose = require('mongoose');
 
-
-mongoose.connect(url, { useNewUrlParser:true });
+mongoose.connect(url, { useNewUrlParser:true,  useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -327,6 +326,8 @@ function logErr(msg){
 }
 
 function prepareDB4UserStatTesting(emptyFirst){
+	const numWords=20;
+	const probForStatExist = 0.3;
 	// async.series([
 		// emptyCollections.bind(null,function(){callback("empty collctions done")),
 		//save user
@@ -340,9 +341,47 @@ function prepareDB4UserStatTesting(emptyFirst){
 	// ]
 		
 	// )	
+	var language;
+	var user;
 	if(emptyFirst){
-		emptyCollections(null).
-		then(function(){console.log("then post empty");});
+		emptyCollections(null)
+		.then(
+			function(){
+				console.log("then post empty");
+				user = new User({user_name: "test user 2", hash_password:"fake_hash_33asdf234dsf324"});
+				return user.save()
+			}
+			,logError)
+		.then(
+			function(){
+				console.log("user saved, now saving language");
+				language = new Language({dislpayName:"Hindi",speechEngingCode: "HI"});
+				return language.save()
+			},
+			logErr)
+		.then(
+			function(){
+				console.log("language saved, now saving some words");
+				var wordsToSave = [];
+				var wordToSave;
+				for(var i = 0;i < numWords; i++){
+					wordToSave = new Word({word: "word" + i, language: language, tags: ['tag1','tag2','tag3']});
+					wordsToSave.push(wordToSave);
+				}
+				//return Word.collection.insert(wordsToSave)
+				return Word.collection.insertMany(wordsToSave)
+			},
+			logErr)
+		.then(
+			function(){
+				console.log("saved words");
+				process.exit(0);
+			},
+			function(err){
+				console.log("err:" + err);
+				process.exit(0);
+			}
+		);
 	}
 	
 }
@@ -360,12 +399,13 @@ function logError(err){
 //test1();
 //emptyCollections();
 //populate2();
-//emptyCollections(populate2);
 
 //emptyCollections(poplateWords);
 //appLogic.test1();
 
 //testPrepInsertUserStat();
+
+//emptyCollections(null);
 
 prepareDB4UserStatTesting(true);
 

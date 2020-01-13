@@ -1,0 +1,17 @@
+
+
+
+
+set up databse for user stat testing:
+clear database, insert user, language, wordstats for some words (randomally)
+
+
+*series:
+	-empty db
+		parllel delete all tables?(how delted parents are handeled?)
+	-insert user
+	-insert language
+	-loop number of words:
+		-insert word
+		-randomly insert (or not) user stat for some of the words
+				
