@@ -55,9 +55,8 @@ function emptyCollections(next){
 		}
 	).then(function(){
 			console.log("userstats colleciton deleted");
-			leave(next);
 			if(next){
-				next();
+				leave(next);
 			}else{
 					return new Promise(function (res,rej){
 						res();
@@ -328,21 +327,11 @@ function logErr(msg){
 function prepareDB4UserStatTesting(emptyFirst){
 	const numWords=20;
 	const probForStatExist = 0.3;
-	// async.series([
-		// emptyCollections.bind(null,function(){callback("empty collctions done")),
-		//save user
-		// function(){
-			// var user = new User({user_name: "test user 2", hash_password:"fake_hash_33asdf234dsf324"});
-			// user.save()
-			// .then(function (info){callback(info)}, logErr);
-		// },
-		
-		// function 
-	// ]
-		
-	// )	
 	var language;
 	var user;
+	var wordsToSave;
+	var attemptsRange = 20;
+	
 	if(emptyFirst){
 		emptyCollections(null)
 		.then(
@@ -362,7 +351,7 @@ function prepareDB4UserStatTesting(emptyFirst){
 		.then(
 			function(){
 				console.log("language saved, now saving some words");
-				var wordsToSave = [];
+				wordsToSave = [];
 				var wordToSave;
 				for(var i = 0;i < numWords; i++){
 					wordToSave = new Word({word: "word" + i, language: language, tags: ['tag1','tag2','tag3']});
@@ -375,6 +364,33 @@ function prepareDB4UserStatTesting(emptyFirst){
 		.then(
 			function(){
 				console.log("saved words");
+				var userStats = [];
+				var rndFlag;
+				var usrSttEntry;
+				var atmptVal;
+				var succVal;
+				for(word in wordsToSave){
+					rndFlag = Math.random() > probForStatExist;
+					atmptVal=Math.floor(Math.random() * attemptsRange);
+					//make success rate uniformly disributed
+					succVal=Math.floor(Math.random() * atmptVal);
+					if(rndFlag){
+						usrSttEntry= new UserStat(
+						{
+							user:user,
+							word:word, 
+							attemptsCount:atmptVal,
+							correctCount:succVal
+						});
+						userStats.push(usrSttEntry);
+					}
+				}
+				return UserStat.collection.insertMany(userStats);
+			},
+			logError
+		).then(
+			function(){
+				console.log("saved user stats");
 				process.exit(0);
 			},
 			function(err){
