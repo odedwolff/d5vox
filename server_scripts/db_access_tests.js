@@ -17,10 +17,15 @@ function dfltErrHandler(err){
 	console.log(err);
 }
 
-testLoadWordsByLang("HI");
+//test user 2
+function testLoadUserStats(){
+	db_access.loadUserStats("HI", null, "test user 2");
+}
+
+//testLoadWordsByLang("HI");
 
 //console.log(db_access.loadAllWords);
 
 
-
+testLoadUserStats();
 

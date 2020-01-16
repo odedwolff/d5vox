@@ -149,7 +149,9 @@ function populate2(){
 		user: user,
 		word:  word,
 		attemptsCount: 8, 
-		correctCount:7
+		correctCount:7,
+		userName:user.user_name,
+		language:word.language.speechEngingCode
 		});
 		return userstat.save();
 	}
@@ -369,7 +371,9 @@ function prepareDB4UserStatTesting(emptyFirst){
 				var usrSttEntry;
 				var atmptVal;
 				var succVal;
-				for(word in wordsToSave){
+				//console.log("language =" + language);
+				for(i in wordsToSave){
+					//console.log("word =" + word);
 					rndFlag = Math.random() > probForStatExist;
 					atmptVal=Math.floor(Math.random() * attemptsRange);
 					//make success rate uniformly disributed
@@ -378,9 +382,11 @@ function prepareDB4UserStatTesting(emptyFirst){
 						usrSttEntry= new UserStat(
 						{
 							user:user,
-							word:word, 
+							word:wordsToSave[i], 
 							attemptsCount:atmptVal,
-							correctCount:succVal
+							correctCount:succVal,
+							userName:user.user_name,
+							langCode:wordsToSave[i].language.speechEngingCode
 						});
 						userStats.push(usrSttEntry);
 					}
