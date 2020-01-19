@@ -4,10 +4,13 @@ var Schema = mongoose.Schema;
 
 var UserStatSchema = new Schema(
   {
-	user:  {type: Schema.Types.ObjectId, ref: 'User', required: true},
+
 	word:  {type: Schema.Types.ObjectId, ref: 'Author', required: true},
+	userNameRef: {type:String},
+	langCodeRef: {type:String},
 	attemptsCount: {type: Number}, 
-	correctCount: {type: Number}
+	correctCount: {type: Number},
+	
   }
 );
 

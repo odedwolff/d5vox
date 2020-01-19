@@ -24,9 +24,51 @@ function loadAllWords(languageTag, tags){
 	
 }
 
-function loadUserStats(language, tage, user){
-	
+function loadUserStats2(language, tage, userName){
+	return User.findOne({user_name:userName}).
+	then(
+		function(foundUser){
+			return UserStat.find({user:foundUser});
+		}
+	).catch(console.log);
 }
+
+function loadUserStats(language, tage, userName){
+	UserStat.aggregate(
+	  [
+	  //{$lookup: {
+		// from:"users",
+		// localField: "user",
+		// foreignField: "_id",
+		// as: "user"
+
+	  // }},
+	  // {$match: {
+		// "user.user_name": userName
+	  // }}
+	   // ,
+	   {$lookup: {
+		from:"languages",
+		localField: "language",
+		foreignField: "_id",
+		as: "language"
+
+	   }},
+	   {$match: {
+		"language.speechEngingCode": language
+	   }}
+	   ]
+	).then(
+		function(results){
+			console.log(results);
+			process.exit(0);
+		}
+		
+	).catch(console.log);
+}
+
+
+
 
 
 function dfltErrHandler(err){

@@ -4,10 +4,8 @@ var Schema = mongoose.Schema;
 
 var WordSchema = new Schema({
 	word: {type: String, required: true, max: 100},
-	//TBD- change to reference
-	language: {type: Schema.Types.ObjectId, ref: 'Language', required: false},
+	languageCode: {type: String, required: false},
 	weight: {type: Number},
-	//each values is a string contiain 1 or more translations (porbably spereated by new line)
 	transTextByLang: {
 		type: Map,
 		of: String
