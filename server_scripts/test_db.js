@@ -327,26 +327,33 @@ function logErr(msg){
 }
 
 function prepareDB4UserStatTesting(emptyFirst){
-	const numWords=20;
-	const probForStatExist = 0.3;
-	var language;
-	var user;
-	var wordsToSave;
-	var attemptsRange = 20;
+		const numWords=20;
+		const probForStatExist = 0.3;
+		//var language;
+		// var user;
+		// var wordsToSave;
+		
+		
+		var attemptsRange = 20;
+		var langCode = "JP";
+		var userName = "avg joe";
+		
 	
-	if(emptyFirst){
-		emptyCollections(null)
+		var promise;
+		if(emptyFirst) {promise = emptyCollections(null);}
+		else {promise = new Promise();}
+		promise
 		.then(
 			function(){
-				console.log("then post empty");
-				user = new User({user_name: "test user 2", hash_password:"fake_hash_33asdf234dsf324"});
+				console.log("saving user");
+				var user = new User({user_name: userName, hash_password:"fake_hash_33asdf234dsf324"});
 				return user.save()
 			}
 			,logError)
 		.then(
 			function(){
 				console.log("user saved, now saving language");
-				language = new Language({dislpayName:"Hindi",speechEngingCode: "HI"});
+				var language = new Language({code:langCode, dislpayName:"Japanease",speechEngingCode: langCode});
 				return language.save()
 			},
 			logErr)
@@ -356,7 +363,7 @@ function prepareDB4UserStatTesting(emptyFirst){
 				wordsToSave = [];
 				var wordToSave;
 				for(var i = 0;i < numWords; i++){
-					wordToSave = new Word({word: "word" + i, language: language, tags: ['tag1','tag2','tag3']});
+					wordToSave = new Word({word: "word" + i, languageCodeRef: langCode, tags: "tag1:tag2:tag3"});
 					wordsToSave.push(wordToSave);
 				}
 				//return Word.collection.insert(wordsToSave)
@@ -381,12 +388,11 @@ function prepareDB4UserStatTesting(emptyFirst){
 					if(rndFlag){
 						usrSttEntry= new UserStat(
 						{
-							user:user,
+							userNameRef:userName,
+							langCodeRef:langCode,
 							word:wordsToSave[i], 
 							attemptsCount:atmptVal,
-							correctCount:succVal,
-							userName:user.user_name,
-							langCode:wordsToSave[i].language.speechEngingCode
+							correctCount:succVal	
 						});
 						userStats.push(usrSttEntry);
 					}
@@ -404,7 +410,7 @@ function prepareDB4UserStatTesting(emptyFirst){
 				process.exit(0);
 			}
 		);
-	}
+	
 	
 }
 
@@ -427,8 +433,8 @@ function logError(err){
 
 //testPrepInsertUserStat();
 
-emptyCollections(null);
+//emptyCollections(null);
 
-//prepareDB4UserStatTesting(true);
+prepareDB4UserStatTesting(true);
 
 

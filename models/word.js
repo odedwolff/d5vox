@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var WordSchema = new Schema({
 	word: {type: String, required: true, max: 100},
-	languageCode: {type: String, required: false},
+	languageCodeRef: {type: String, required: false},
 	weight: {type: Number},
 	transTextByLang: {
 		type: Map,
