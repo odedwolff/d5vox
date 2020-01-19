@@ -427,8 +427,8 @@ function logError(err){
 
 //testPrepInsertUserStat();
 
-//emptyCollections(null);
+emptyCollections(null);
 
-prepareDB4UserStatTesting(true);
+//prepareDB4UserStatTesting(true);
 
 
