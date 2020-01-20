@@ -22,10 +22,31 @@ function testLoadUserStats(){
 	db_access.loadUserStats("HI", null, "test user 2");
 }
 
+function testLoadByLanCod(){
+	db_access.loadWordsByLangCode("JP", null)
+	.then((results)=>{
+		console.log(results);process.exit(1);}
+	
+	)
+	.catch(()=>{console.log("in catch block")});
+}
+
+function testUserStat(){
+	db_access.loadUserStats("JP", null, "avg joe")
+	.then((results)=>{
+		console.log(results);process.exit(1);}
+	
+	)
+	.catch(()=>{console.log("in catch block")});
+	
+}
+
 //testLoadWordsByLang("HI");
 
 //console.log(db_access.loadAllWords);
 
 
-testLoadUserStats();
+//testLoadByLanCod();
+
+testUserStat();
 

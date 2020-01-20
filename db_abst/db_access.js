@@ -24,6 +24,13 @@ function loadAllWords(languageTag, tags){
 	
 }
 
+function loadWordsByLangCode(langCode, tags){
+	return Word.find({languageCodeRef:langCode}).exec();
+}
+
+
+
+
 function loadUserStats2(language, tage, userName){
 	return User.findOne({user_name:userName}).
 	then(
@@ -33,20 +40,9 @@ function loadUserStats2(language, tage, userName){
 	).catch(console.log);
 }
 
-function loadUserStats(language, tage, userName){
+function loadUserStatsOld(language, tage, userName){
 	UserStat.aggregate(
 	  [
-	  //{$lookup: {
-		// from:"users",
-		// localField: "user",
-		// foreignField: "_id",
-		// as: "user"
-
-	  // }},
-	  // {$match: {
-		// "user.user_name": userName
-	  // }}
-	   // ,
 	   {$lookup: {
 		from:"languages",
 		localField: "language",
@@ -67,6 +63,11 @@ function loadUserStats(language, tage, userName){
 	).catch(console.log);
 }
 
+function loadUserStats(langCode, tage, userName){
+	return UserStat.find({userNameRef:userName, langCodeRef:langCode}).exec();
+}
+
+
 
 
 
@@ -78,5 +79,6 @@ function dfltErrHandler(err){
 
 module.exports = {
 	loadAllWords:loadAllWords,
-	loadUserStats:loadUserStats
+	loadUserStats:loadUserStats,
+	loadWordsByLangCode:loadWordsByLangCode
 }
