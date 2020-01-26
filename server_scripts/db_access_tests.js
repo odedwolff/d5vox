@@ -41,12 +41,12 @@ function testUserStat(){
 	
 }
 
-//testLoadWordsByLang("HI");
+testLoadWordsByLang("JP");
 
 //console.log(db_access.loadAllWords);
 
 
 //testLoadByLanCod();
 
-testUserStat();
+//testUserStat();
 

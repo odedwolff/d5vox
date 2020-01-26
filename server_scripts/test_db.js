@@ -363,7 +363,16 @@ function prepareDB4UserStatTesting(emptyFirst){
 				wordsToSave = [];
 				var wordToSave;
 				for(var i = 0;i < numWords; i++){
-					wordToSave = new Word({word: "word" + i, languageCodeRef: langCode, tags: "tag1:tag2:tag3"});
+					wordToSave = new Word(
+						{word: "word" + i, 
+						languageCodeRef: langCode, 
+						tags: "tag1:tag2:tag3",
+						transTextByLang:{
+							IT:'word' + i + 'in italian \n word' + i + ' in italian another translation',
+							FR:'word' + i + ' in french'
+							}
+						}
+					);
 					wordsToSave.push(wordToSave);
 				}
 				//return Word.collection.insert(wordsToSave)
