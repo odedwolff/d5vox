@@ -70,25 +70,22 @@ function loadUserStats(langCode, tage, userName){
 }
 
 
-
+//loads words of given parameters, paired with coressponding user stats, where avaliable 
 function loadAllWordsAndTheirAvlStat(langSymbol, userName, tages, handler){
 	async.parallel(
 		{
-			foundWords:function(callback){
+			foundStats:function(callback){
 				UserStat.find({userNameRef:userName, langCodeRef:langSymbol}).exec()
 				.then(function(results){callback(null, results)});
 			},
-			foundStats:function(callback){
+			foundWords:function(callback){
 			Word.find({languageCodeRef:langSymbol}).exec()
 				.then(function(results){callback(null, results)});
 			}
 		},
 		
-		
-		//callback, just deligate to argument handler 
+		//callback- pair words with stats and deligate to argument handler 
 		function(err, results){
-			
-			//console.log()
 			var wordsMap = {};
 			var key;
 			//make a map of wordsIDs to their word
@@ -98,15 +95,14 @@ function loadAllWordsAndTheirAvlStat(langSymbol, userName, tages, handler){
 			}
 			
 			
-			
 			// for words with existing stat entry, set the "stat" field 
 			for(var i = 0; i < results.foundStats.length; i++){
-				key=results.foundStats[i].wordSrc;
+				key=(results.foundStats[i].srcWord);
 				console.log("key=" + key);
 				wordsMap[key].stat=results.foundStats[i];
 			}
 			
-			//handler(results);
+			handler(wordsMap);
 		}
 			
 	)
