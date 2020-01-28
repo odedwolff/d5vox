@@ -399,7 +399,7 @@ function prepareDB4UserStatTesting(emptyFirst){
 						{
 							userNameRef:userName,
 							langCodeRef:langCode,
-							word:wordsToSave[i], 
+							srcWord:wordsToSave[i], 
 							attemptsCount:atmptVal,
 							correctCount:succVal	
 						});

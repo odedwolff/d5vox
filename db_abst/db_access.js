@@ -3,6 +3,8 @@ var Language = require('../models/language');
 var Word = require('../models/word');
 var UserStat = require('../models/userstat');
 var User = require('../models/user');
+var async = require("async");
+
 //var appLogic = require('../app_logic/appLogic');
 
 
@@ -15,7 +17,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 //tags filtering is ignored for now 
 function loadAllWords(languageTag, tags){
-	return Language.findOne({speechEngingCode:languageTag}).
+	return Language.findOne({languageCodeRef:languageTag}).
 	then(
 		function(foundLang){
 			return Word.find({language:foundLang}).exec();
@@ -69,6 +71,47 @@ function loadUserStats(langCode, tage, userName){
 
 
 
+function loadAllWordsAndTheirAvlStat(langSymbol, userName, tages, handler){
+	async.parallel(
+		{
+			foundWords:function(callback){
+				UserStat.find({userNameRef:userName, langCodeRef:langSymbol}).exec()
+				.then(function(results){callback(null, results)});
+			},
+			foundStats:function(callback){
+			Word.find({languageCodeRef:langSymbol}).exec()
+				.then(function(results){callback(null, results)});
+			}
+		},
+		
+		
+		//callback, just deligate to argument handler 
+		function(err, results){
+			
+			//console.log()
+			var wordsMap = {};
+			var key;
+			//make a map of wordsIDs to their word
+			for(var i = 0; i < results.foundWords.length; i++){
+				key=results.foundWords[i].id;
+				wordsMap[key]={word:results.foundWords[i], stat:null};
+			}
+			
+			
+			
+			// for words with existing stat entry, set the "stat" field 
+			for(var i = 0; i < results.foundStats.length; i++){
+				key=results.foundStats[i].wordSrc;
+				console.log("key=" + key);
+				wordsMap[key].stat=results.foundStats[i];
+			}
+			
+			//handler(results);
+		}
+			
+	)
+}
+
 
 
 
@@ -80,5 +123,6 @@ function dfltErrHandler(err){
 module.exports = {
 	loadAllWords:loadAllWords,
 	loadUserStats:loadUserStats,
-	loadWordsByLangCode:loadWordsByLangCode
+	loadWordsByLangCode:loadWordsByLangCode,
+	loadAllWordsAndTheirAvlStat:loadAllWordsAndTheirAvlStat
 }

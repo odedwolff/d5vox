@@ -1,6 +1,5 @@
 var db_access= require('../db_abst/db_access');
 
-
 function testLoadWordsByLang(langTag){
 	db_access.loadAllWords(langTag,null)
 	.then(
@@ -41,7 +40,21 @@ function testUserStat(){
 	
 }
 
-testLoadWordsByLang("JP");
+function testLoadWordsAndStats(){
+	try{
+		db_access.loadAllWordsAndTheirAvlStat("JP", "avg joe" , null, 
+			(results)=>{
+				console.log(results);
+				process.exit(0);
+			}
+		);
+	}catch(err){
+		console.log(err);
+		process.exit(0);
+	}
+}
+
+//testLoadWordsByLang("JP");
 
 //console.log(db_access.loadAllWords);
 
@@ -49,4 +62,6 @@ testLoadWordsByLang("JP");
 //testLoadByLanCod();
 
 //testUserStat();
+
+testLoadWordsAndStats();
 
