@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	button(onclick="loadWords()") init
+	div(id='divReady' dislplay=none)
+		label(id='currentQuestion')
+		button(id='showAnswer' onclick="showAnswer()")
+		label(id='CurrentAnswer' display=none)
+		button(id='nextQ' onclick="nextQuestion()")

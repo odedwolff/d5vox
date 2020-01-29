@@ -1,6 +1,6 @@
 console.log("welcome to the jungle");
 
-
+var _sessionId = getCookie("sessionId");
 
 function setPanelUserLoggedIn(userName){
 	document.getElementById("lablUser").innerHTML  = userName;

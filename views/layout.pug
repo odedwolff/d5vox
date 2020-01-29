@@ -10,6 +10,7 @@ html(lang='en')
     link(rel='stylesheet', href='/stylesheets/style.css')    
     
     script(src='../javascripts/manage_user.js')
+    script(src='../javascripts/game_loop.js')
 
   body(onload="initDoc()")
     div(class='container-fluid')
@@ -30,6 +31,8 @@ html(lang='en')
                   label(id='lablUser') user place holder
                 li
                   button(onclick="sendLogOut()") log out
+                li 
+                  a(href='/play/practiceLoop') practice 
           block sidebar
             ul(class='sidebar-nav')
               li 
