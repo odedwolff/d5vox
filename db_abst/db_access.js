@@ -98,7 +98,7 @@ function loadAllWordsAndTheirAvlStat(langSymbol, userName, tages, handler){
 			// for words with existing stat entry, set the "stat" field 
 			for(var i = 0; i < results.foundStats.length; i++){
 				key=(results.foundStats[i].srcWord);
-				console.log("key=" + key);
+				//console.log("key=" + key);
 				wordsMap[key].stat=results.foundStats[i];
 			}
 			
