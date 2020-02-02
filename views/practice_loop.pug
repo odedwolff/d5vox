@@ -3,7 +3,10 @@ extends layout
 block content
 	button(onclick="loadWords()") init
 	div(id='divReady' dislplay=none)
-		label(id='currentQuestion')
-		button(id='showAnswer' onclick="showAnswer()")
-		label(id='CurrentAnswer' display=none)
-		button(id='nextQ' onclick="nextQuestion()")
+		div 
+			label(id='currentQuestion') current question:
+		div
+			button(id='showAnswer' onclick="showAnswer()") show answer
+			label(id='CurrentAnswer') label cont 
+		div
+			button(id='nextQ' onclick="nextQuestion()") next question
