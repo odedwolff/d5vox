@@ -336,7 +336,7 @@ function prepareDB4UserStatTesting(emptyFirst){
 		
 		var attemptsRange = 20;
 		var langCode = "JP";
-		var userName = "avg joe";
+		var userName = "user1";
 		
 	
 		var promise;
@@ -367,6 +367,7 @@ function prepareDB4UserStatTesting(emptyFirst){
 						{word: "word" + i, 
 						languageCodeRef: langCode, 
 						tags: "tag1:tag2:tag3",
+						weight: Math.random(),
 						transTextByLang:{
 							IT:'word' + i + 'in italian \n word' + i + ' in italian another translation',
 							FR:'word' + i + ' in french'
