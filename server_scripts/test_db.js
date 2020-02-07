@@ -19,7 +19,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 
-function emptyCollections(next){
+function emptyCollections(next, keepUser){
 	function leave(next){
 		if(next==null){
 			process.exit(0)
@@ -32,7 +32,12 @@ function emptyCollections(next){
 	.then(
 		function(){
 			console.log("languages colleciton deleted");
-			return db.dropCollection('users');
+			if(!keepUser){
+				return db.dropCollection('users');
+			}else{
+				return new Promise((res,err)=>{res()});
+			}
+			
 		},
 		function(err){
 			console.log("error at deleting launguages colleciton: " + err);
@@ -40,7 +45,7 @@ function emptyCollections(next){
 		}
 	).then(
 		function(){
-			console.log("users colleciton deleted");
+			console.log("users colleciton deleted or kept(depends on options)");
 			return db.dropCollection('words');
 		},
 		function(err){
@@ -328,31 +333,35 @@ function logErr(msg){
 	console.log("Error" + msg);
 }
 
-function prepareDB4UserStatTesting(emptyFirst){
+
+//user name is needed even if skipUser=true, because it is being referred to by user name by the user stat 
+function prepareDB4UserStatTesting(emptyFirst, userName, skipUser){
 		const numWords=20;
 		const probForStatExist = 0.3;
 		
-		
-		
 		var attemptsRange = 20;
 		var langCode = "JP";
-		var userName = "user temp";
+		//var userName = "userName1";
 		
 	
 		var promise;
-		if(emptyFirst) {promise = emptyCollections(null);}
+		if(emptyFirst) {promise = emptyCollections(null, true);}
 		else {promise = new Promise();}
 		promise
 		.then(
 			function(){
-				console.log("saving user");
-				var user = new User({user_name: userName, hash_password:"fake_hash_33asdf234dsf324"});
-				return user.save()
+				if(skipUser){
+					return new Promise((res,err)=>{res()});
+				}else{
+					console.log("saving user");
+					var user = new User({user_name: userName, hash_password:"fake_hash_33asdf234dsf324"});
+					return user.save()
+				}
 			}
 			,logError)
 		.then(
 			function(){
-				console.log("user saved, now saving language");
+				console.log("user saved or skipped, now saving language");
 				var language = new Language({code:langCode, dislpayName:"Japanease",speechEngingCode: langCode});
 				return language.save()
 			},
@@ -392,9 +401,9 @@ function prepareDB4UserStatTesting(emptyFirst){
 				for(i in wordsToSave){
 					//console.log("word =" + word);
 					rndFlag = Math.random() > probForStatExist;
-					atmptVal=Math.floor(Math.random() * attemptsRange);
+					atmptVal=Math.floor(Math.random() * attemptsRange) + 4;
 					//make success rate uniformly disributed
-					succVal=Math.floor(Math.random() * atmptVal);
+					succVal=Math.floor(Math.random() * atmptVal) + 2;
 					if(rndFlag){
 						usrSttEntry= new UserStat(
 						{
@@ -419,7 +428,9 @@ function prepareDB4UserStatTesting(emptyFirst){
 				console.log("err:" + err);
 				process.exit(0);
 			}
-		);
+		).catch((err)=>{
+			console.log("caught error" + err);
+		});
 	
 	
 }
@@ -461,11 +472,14 @@ function logError(err){
 	console.log(err);
 }
 
+/**
+typically we don't want to create or delete users with this script, we do it indepentently. we still need to 
+provide a user name for the created UserStat entries to refer 
+**/
+
+prepareDB4UserStatTesting(true, "user1", true);
 
 
-//prepareDB4UserStatTesting(true);
-
-
-updateUserStat_userName("user1");
+//updateUserStat_userName("user1");
 
 
