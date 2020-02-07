@@ -8,6 +8,8 @@ var async = require('async');
 
 var url='mongodb+srv://shaady100:Pass1001@cluster0-69y6r.mongodb.net/d5?retryWrites=true&w=majority';
 
+//var url='fakeURL';
+
 var mongoose = require('mongoose');
 
 mongoose.connect(url, { useNewUrlParser:true,  useUnifiedTopology: true });
@@ -329,14 +331,12 @@ function logErr(msg){
 function prepareDB4UserStatTesting(emptyFirst){
 		const numWords=20;
 		const probForStatExist = 0.3;
-		//var language;
-		// var user;
-		// var wordsToSave;
+		
 		
 		
 		var attemptsRange = 20;
 		var langCode = "JP";
-		var userName = "user1";
+		var userName = "user temp";
 		
 	
 		var promise;
@@ -425,6 +425,36 @@ function prepareDB4UserStatTesting(emptyFirst){
 }
 
 
+//updaet user name for all user stat entires of a give user
+function updateUserStat_userName(newUserName){
+	console.log("updateUserStat_userName()");
+	function callback3(err, numAffected){
+		console.log("in callback");
+		console.log(err + ":" + numAffected);
+		process.exit(0);
+	}
+	var
+	//conditions = { userNameRef: 'user1' }
+	conditions = { }
+	, update = {$set: {userNameRef:newUserName}}
+	, options = { multi: true };
+	UserStat.update(conditions, update, options, callback3);
+}
+
+
+
+
+
+
+
+function findTest(){
+  UserStat.findOne({ userNameRef: 'user1' }, function (err, doc){
+  doc.userNameRef='new name';
+  doc.save();
+	});
+}
+
+
 
 
 function logError(err){
@@ -433,18 +463,9 @@ function logError(err){
 
 
 
+//prepareDB4UserStatTesting(true);
 
-//test1();
-//emptyCollections();
-//populate2();
 
-//emptyCollections(poplateWords);
-//appLogic.test1();
-
-//testPrepInsertUserStat();
-
-//emptyCollections(null);
-
-prepareDB4UserStatTesting(true);
+updateUserStat_userName("user1");
 
 

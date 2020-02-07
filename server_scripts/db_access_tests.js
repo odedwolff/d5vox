@@ -1,3 +1,4 @@
+
 var db_access= require('../db_abst/db_access');
 
 function testLoadWordsByLang(langTag){
@@ -34,7 +35,6 @@ function testUserStat(){
 	db_access.loadUserStats("JP", null, "avg joe")
 	.then((results)=>{
 		console.log(results);process.exit(1);}
-	
 	)
 	.catch(()=>{console.log("in catch block")});
 	
