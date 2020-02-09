@@ -24,6 +24,8 @@ function loadWords(){
 			enableGameLoop(true);
 			//applyWordsFamiliarity();
 			applyDefaultStats();
+			//select first word, following words will be select by user's button press 
+			selectNextWord();
 		}else{
 			console.log("reply status:" + xhr.status);
 		}
@@ -99,6 +101,7 @@ function selectNextWord(){
 		}
 	}
 	gameState.currentWordIdx = topScoreIdx; 
+	updateUICurrentQ();
 	return{topScore:topScore, topScoreIdx:topScoreIdx}
 }
 
@@ -110,9 +113,9 @@ function testNextWord(){
 
 function updateUICurrentQ(){
 	var crurentWordStat = gameState.wordsInfo[gameState.currentWordIdx];
-	getElementById("lblCurrentQuestion").text=crurentWordStat.word.word;
-	getElementById("lblCurrentAnswer").text= 
-		crurentWordStat.word.transTextByLang[gameState.wordsInfo.trgLangCode];
+	document.getElementById("lblCurrentQuestion").innerHTML=crurentWordStat.word.word;
+	document.getElementById("lblCurrentAnswer").innerHTML= 
+		crurentWordStat.word.transTextByLang[gameState.trgLangCode];
 }
 
 
