@@ -101,12 +101,15 @@ function selectNextWord(){
 		}
 	}
 	gameState.currentWordIdx = topScoreIdx; 
+	showAnswer(false);
 	updateUICurrentQ();
 	return{topScore:topScore, topScoreIdx:topScoreIdx}
 }
 
 function testNextWord(){
+	
 	var nextWordInfo = selectNextWord();
+	
 	console.log("returned next word: score=" + nextWordInfo.topScore + ": index=" + nextWordInfo.topScoreIdx);
 	
 }
@@ -118,7 +121,14 @@ function updateUICurrentQ(){
 		crurentWordStat.word.transTextByLang[gameState.trgLangCode];
 }
 
-
+function showAnswer(flag){
+	var elm=document.getElementById("lblCurrentAnswer");
+	if(flag){
+		elm.style.visibility='visible';
+	}else{
+		elm.style.visibility='hidden';
+	}
+}
 
 
 
