@@ -1,6 +1,9 @@
-var wordsInfo;
-
-
+var gameState = { 
+	 srcLanguageCode:"JP",
+	 trgLangCode:"IT",
+	 wordsInfo:null,
+	 currentWordIdx:-1
+}
 const settings = {
 	defaultStat : {
 		nmAttempts:4,
@@ -17,7 +20,7 @@ function loadWords(){
 		if (xhr.status === 200) {
 			var userInfo = JSON.parse(xhr.responseText);
 			console.log(userInfo);
-			wordsInfo = propsToArray(userInfo);
+			gameState.wordsInfo = propsToArray(userInfo);
 			enableGameLoop(true);
 			//applyWordsFamiliarity();
 			applyDefaultStats();
@@ -63,28 +66,11 @@ function wordFamiliarity(nmGuesses, nmSuccess){
 
 
 
-// function applyWordsFamiliarity(){
-	// var word; 
-	// var familiarity;
-	// for(i in wordsInfo){
-		// word=wordsInfo[i];
-		
-		// if(word.stat){
-			// familiarity=wordFamiliarity(word.stat.attemptsCount, word.stat.correctCount);
-			// word.familiarity=familiarity;
-		// }else{
-			// familiarity=wordFamiliarity(0, 0);
-			// word.familiarity=familiarity;
-		// }
-	// }
-// }
-
-
-//for words that don't have a stats entyr, create a default one, whereas attempts and succes both > 0.
+//for words that don't have a stats entry, create a default one, whereas attempts and succes both > 0.
 function applyDefaultStats(){
-	for (i in wordsInfo){
-		if(!wordsInfo[i].stat){
-			wordsInfo[i].stat = {
+	for (i in gameState.wordsInfo){
+		if(!gameState.wordsInfo[i].stat){
+			gameState.wordsInfo[i].stat = {
 				attemptsCount:settings.defaultStat.nmAttempts,
 				correctCount:settings.defaultStat.nmSuccuss,
 				//inidicates the entry was not loaded from datasbase, and will need 
@@ -104,14 +90,15 @@ function selectNextWord(){
 	var topScore = 0; 
 	var topScoreIdx;
 	var score; 
-	for(i in wordsInfo){
-		score = (wordsInfo[i].word.weight  * Math.random() ) / 
-		wordFamiliarity(wordsInfo[i].stat.attemptsCount, wordsInfo[i].stat.correctCount);
+	for(i in gameState.wordsInfo){
+		score = (gameState.wordsInfo[i].word.weight  * Math.random() ) / 
+		wordFamiliarity(gameState.wordsInfo[i].stat.attemptsCount, gameState.wordsInfo[i].stat.correctCount);
 		if(score > topScore){
 			topScore = score;
 			topScoreIdx = i; 
 		}
 	}
+	gameState.currentWordIdx = topScoreIdx; 
 	return{topScore:topScore, topScoreIdx:topScoreIdx}
 }
 
@@ -119,6 +106,13 @@ function testNextWord(){
 	var nextWordInfo = selectNextWord();
 	console.log("returned next word: score=" + nextWordInfo.topScore + ": index=" + nextWordInfo.topScoreIdx);
 	
+}
+
+function updateUICurrentQ(){
+	var crurentWordStat = gameState.wordsInfo[gameState.currentWordIdx];
+	getElementById("lblCurrentQuestion").text=crurentWordStat.word.word;
+	getElementById("lblCurrentAnswer").text= 
+		crurentWordStat.word.transTextByLang[gameState.wordsInfo.trgLangCode];
 }
 
 
