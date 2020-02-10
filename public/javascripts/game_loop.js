@@ -131,6 +131,44 @@ function showAnswer(flag){
 }
 
 
+function right(){
+	answer({correct:true})
+}
+function wrong(){
+	answer({correct:false})
+}
+
+function answer(params){
+	var crurentWordStat = gameState.wordsInfo[gameState.currentWordIdx];
+	crurentWordStat.stat.attemptsCount+=1;
+	if(params.correct){
+		crurentWordStat.stat.correctCount+=1;
+	}
+	
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', '/play/updateStat');	
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.onload = function(wordInfoIdx) {
+		if(xhr.status==200){
+			//mark the stats as saved in database(even it already was)
+			//this will indicate in the future it shouldn't be insteretd, only updated 
+			gameState.wordsInfo[gameState.wordInfoIdx].stat.statneedsDataseInsert=false;
+		}
+		else{
+			console.log("error at updating stats, http status " + xhr.status);
+		}
+	}.bind(null, gameState.currentWordIdx);
+	xhr.send(JSON.stringify({
+		wordId:crurentWordStat.word.id,
+		nmAttempts:crurentWordStat.stat.attemptsCount,
+		nmSuccess:crurentWordStat.stat.correctCount,
+		needsInsert:crurentWordStat.statneedsDataseInsert
+	}));
+	
+}
+
+
+
 
 
 
