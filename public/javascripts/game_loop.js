@@ -77,7 +77,7 @@ function applyDefaultStats(){
 				correctCount:settings.defaultStat.nmSuccuss,
 				//inidicates the entry was not loaded from datasbase, and will need 
 				//to have an entry inserted 
-				needsDataseInsert:true
+				statneedsDataseInsert:true
 				}
 		}
 	}
@@ -168,6 +168,8 @@ function answer(params){
 			console.log("error at updating stats, http status " + xhr.status);
 		}
 	}.bind(null, gameState.currentWordIdx);
+	
+	
 	xhr.send(JSON.stringify({
 		wordId:crurentWordStat.word._id,
 		nmAttempts:crurentWordStat.stat.attemptsCount,
