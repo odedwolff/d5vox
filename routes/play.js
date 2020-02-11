@@ -9,6 +9,10 @@ router.get('/practiceLoop', play_controller.practiceLoopGet);
 
 router.post('/loadWordsAndStats', play_controller.loadWordsAndStats);
 
+
+router.post('/updateStat', play_controller.updateStat);
+
+
 //router.post('/practiceLoop', );
 
 

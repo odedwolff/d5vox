@@ -14,6 +14,14 @@
 	visibility:hidden;
 }
 
+button:disabled{
+	background:#C0CEB3;
+	color:#9D9F9B;
+}
+button:enabled{
+	background:#9CD17A;
+}
+
 
 
 

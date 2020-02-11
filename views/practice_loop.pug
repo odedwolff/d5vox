@@ -6,12 +6,14 @@ block content
 		div 
 			label(id='lblCurrentQuestion') current question:
 		div
-			button(id='showAnswer' onclick="showAnswer(true)") show answer
+			button(id='showAnswer' onclick="showAnswerClick()") show answer
 			label(id='lblCurrentAnswer') label cont 
 		div
-			button(id='btnRight' onclick="right()") right
-			button(id='btnWrong' onclick="wrong()") wrong
-		div
-			button(id='nextQ' onclick="selectNextWord()") next question
-		div
-			button(id=testBotton onclick="testNextWord()") testNextQ
+			button(id='btnRight' onclick="right()" disabled) right
+			button(id='btnWrong' onclick="wrong()" disabled) wrong
+			
+		//
+			div
+				button(id='nextQ' onclick="selectNextWord()") next question
+			div
+				button(id=testBotton onclick="testNextWord()") testNextQ

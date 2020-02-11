@@ -1,5 +1,6 @@
 var dbAccess=require('../db_abst/db_access');
 var User=require('../models/user');
+//require(json);
 
 
 exports.practiceLoopGet = function(req, res, next) {     
@@ -26,3 +27,47 @@ exports.loadWordsAndStats=function(req, res, next){
 	
 	//res.json({hello:'world'});
 }
+
+
+exports.updateStat=function(req, res, next){
+	//console.log("updateStat()");
+	console.log("updateStat, req=" + JSON.stringify(req.body));
+	// var sessionId=req.cookies['sessionId'];
+	// console.log('sessionId from cookie= '+ sessionId);
+	// User.find({active_session_id:sessionId})
+	// .then(){
+	//	get params
+		// var nmAttempts = 
+	// }
+	res.json({});
+}
+
+
+function enableButtons(flag){
+	document.getElementById('btnRight').disabled=flag;
+	document.getElementById('btnWrong').disabled=flag;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

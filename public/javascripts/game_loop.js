@@ -121,6 +121,14 @@ function updateUICurrentQ(){
 		crurentWordStat.word.transTextByLang[gameState.trgLangCode];
 }
 
+
+
+function showAnswerClick(){
+	showAnswer(true);
+	enableCorrectButtons(true);
+}
+
+
 function showAnswer(flag){
 	var elm=document.getElementById("lblCurrentAnswer");
 	if(flag){
@@ -139,6 +147,8 @@ function wrong(){
 }
 
 function answer(params){
+	enableCorrectButtons(false);
+	setTimeout(()=>{selectNextWord()},700);
 	var crurentWordStat = gameState.wordsInfo[gameState.currentWordIdx];
 	crurentWordStat.stat.attemptsCount+=1;
 	if(params.correct){
@@ -152,19 +162,25 @@ function answer(params){
 		if(xhr.status==200){
 			//mark the stats as saved in database(even it already was)
 			//this will indicate in the future it shouldn't be insteretd, only updated 
-			gameState.wordsInfo[gameState.wordInfoIdx].stat.statneedsDataseInsert=false;
+			gameState.wordsInfo[wordInfoIdx].stat.statneedsDataseInsert=false;
 		}
 		else{
 			console.log("error at updating stats, http status " + xhr.status);
 		}
 	}.bind(null, gameState.currentWordIdx);
 	xhr.send(JSON.stringify({
-		wordId:crurentWordStat.word.id,
+		wordId:crurentWordStat.word._id,
 		nmAttempts:crurentWordStat.stat.attemptsCount,
 		nmSuccess:crurentWordStat.stat.correctCount,
-		needsInsert:crurentWordStat.statneedsDataseInsert
+		needsInsert:crurentWordStat.stat.statneedsDataseInsert? true : false
 	}));
-	
+}
+
+
+
+function enableCorrectButtons(flag){
+	document.getElementById('btnRight').disabled=!flag;
+	document.getElementById('btnWrong').disabled=!flag;
 }
 
 
