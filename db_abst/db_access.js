@@ -115,10 +115,46 @@ function dfltErrHandler(err){
 	console.log(err);
 }
 
+function insertUserStat(params, callback){
+	var inst = new UserStat();
+	inst.srcWord = params.wordId; 
+	inst.userNameRef=params.userName;
+	inst.langCodeRef=params.langCode;
+	inst.attemptsCount=params.nmAttempts;
+	inst.correctCount=params.nmSuccess;
+	inst.save(callback);
+}
+
+function updateUserStat(parmas, callback){
+	console.log("updateUserStat()");
+	var conditions={
+		userNameRef:parmas.userName,
+		srcWord:parmas.wordId,
+		langCodeRef:parmas.langCode
+	};
+	console.log("condition arg:" + JSON.stringify(conditions));
+
+	var update={
+		$set:{
+			attemptsCount:parmas.nmAttempts,
+			correctCount:parmas.nmSuccess
+		}
+	}
+	UserStat.updateOne(conditions, update, {}, callback);
+}
+
+
+
+
+
+
 
 module.exports = {
 	loadAllWords:loadAllWords,
 	loadUserStats:loadUserStats,
 	loadWordsByLangCode:loadWordsByLangCode,
-	loadAllWordsAndTheirAvlStat:loadAllWordsAndTheirAvlStat
+	loadAllWordsAndTheirAvlStat:loadAllWordsAndTheirAvlStat,
+	insertUserStat:insertUserStat, 
+	updateUserStat:updateUserStat
+
 }

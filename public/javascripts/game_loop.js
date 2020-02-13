@@ -11,6 +11,7 @@ const settings = {
 	}
 }
 
+
 function loadWords(){
 	var xhr = new XMLHttpRequest();
 	//xhr.open('PUT', 'myservice/user/1234');
@@ -31,7 +32,8 @@ function loadWords(){
 		}
 	};
 	xhr.send(JSON.stringify({
-		sessionId:_sessionId
+		sessionId:_sessionId, 
+		srcLangCode:gameState.srcLanguageCode
 	}));
 }
 
@@ -76,7 +78,8 @@ function applyDefaultStats(){
 				attemptsCount:settings.defaultStat.nmAttempts,
 				correctCount:settings.defaultStat.nmSuccuss,
 				//inidicates the entry was not loaded from datasbase, and will need 
-				//to have an entry inserted 
+				//to have an entry inserted,
+				srcWord:gameState.wordsInfo[i].word._id,
 				statneedsDataseInsert:true
 				}
 		}
@@ -160,8 +163,7 @@ function answer(params){
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.onload = function(wordInfoIdx) {
 		if(xhr.status==200){
-			//mark the stats as saved in database(even it already was)
-			//this will indicate in the future it shouldn't be insteretd, only updated 
+			//either a new word was inserted, or an existing word updated. either way the wordStat is saved 
 			gameState.wordsInfo[wordInfoIdx].stat.statneedsDataseInsert=false;
 		}
 		else{
@@ -174,7 +176,9 @@ function answer(params){
 		wordId:crurentWordStat.word._id,
 		nmAttempts:crurentWordStat.stat.attemptsCount,
 		nmSuccess:crurentWordStat.stat.correctCount,
-		needsInsert:crurentWordStat.stat.statneedsDataseInsert? true : false
+		needsInsert:crurentWordStat.stat.statneedsDataseInsert? true : false, 
+		langCode:gameState.srcLanguageCode
+		//userName:crurentWordStat.stat.userNameRef
 	}));
 }
 

@@ -18,7 +18,8 @@ exports.loadWordsAndStats=function(req, res, next){
 	.then(function(foundUsers){
 			var userName=foundUsers[0]['user_name'];
 			console.log('retreived user name=' + userName);
-			dbAccess.loadAllWordsAndTheirAvlStat("JP", userName, null, 
+			var srcLangCode=req.body.srcLangCode;
+			dbAccess.loadAllWordsAndTheirAvlStat(/*"JP"*/srcLangCode, userName, null, 
 				(results)=>{
 					res.json({results:results});
 				}
@@ -30,23 +31,49 @@ exports.loadWordsAndStats=function(req, res, next){
 
 
 exports.updateStat=function(req, res, next){
+	var userName;
 	//console.log("updateStat()");
 	console.log("updateStat, req=" + JSON.stringify(req.body));
-	// var sessionId=req.cookies['sessionId'];
-	// console.log('sessionId from cookie= '+ sessionId);
-	// User.find({active_session_id:sessionId})
-	// .then(){
-	//	get params
-		// var nmAttempts = 
-	// }
-	res.json({});
+	var sessionId=req.cookies['sessionId'];
+	console.log('sessionId from cookie= '+ sessionId);
+	User.find({active_session_id:sessionId})
+	.then((foundUsers)=>{
+		userName=foundUsers[0]['user_name'];
+		console.log('retreived user name=' + userName);
+	})
+	.then(
+		()=>{
+			var userStatParams = {
+				userName:userName, 
+				wordId:req.body.wordId, 
+				langCode:req.body.langCode, 
+				nmAttempts:req.body.nmAttempts, 
+				nmSuccess:req.body.nmSuccess
+			}
+			if(req.body.needsInsert){
+				dbAccess.insertUserStat(userStatParams, 
+				(err, newInstance)=>{
+						res.json({insrtedInstance:JSON.stringify(newInstance)});
+					}
+				);
+			}else{
+				dbAccess.updateUserStat(userStatParams, 
+				(err, opInfo)=>
+					{
+						console.log("user stat update callback, opInfo:" + JSON.stringify(opInfo));
+						if(!err){
+							res.json({msg:"doc updated", opInfo:JSON.stringify(opInfo)});
+						}
+					}
+				);
+			}
+		}
+	)
+	//res.json({});
 }
 
 
-function enableButtons(flag){
-	document.getElementById('btnRight').disabled=flag;
-	document.getElementById('btnWrong').disabled=flag;
-}
+
 
 
 
