@@ -73,6 +73,12 @@ exports.updateStat=function(req, res, next){
 }
 
 
+exports.settingGet = function(req, res, next) {     
+  //res.render('user_login', {title:"Enter User Details"} );
+  res.render('settings', {} );
+};
+
+
 
 
 

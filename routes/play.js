@@ -13,6 +13,10 @@ router.post('/loadWordsAndStats', play_controller.loadWordsAndStats);
 router.post('/updateStat', play_controller.updateStat);
 
 
+router.get('/settings', play_controller.settingGet);
+
+
+
 //router.post('/practiceLoop', );
 
 

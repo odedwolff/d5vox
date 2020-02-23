@@ -1,0 +1,14 @@
+extends layout
+
+block content
+	div(id='divLanguages')
+		ul(class='clsListStack')
+			li
+				label 'languages'
+			li
+				label(id='lblLangLoading') '--laoding --'
+			li
+				select(name=comboLang)
+					option(value='1') 'option1' 
+					option(value='2') 'option2' 
+					option(value='3') 'option3' 
