@@ -74,8 +74,9 @@ exports.login_user_post = [
 						if(args==null){
 							return;
 						}
-						res.cookie('sessionId',sessionIdCookie, { maxAge: 900000, httpOnly: false });
-						res.cookie('loggedUserName',req.body.user, { maxAge: 900000, httpOnly: false });
+						//set log on cookies for 48 hours
+						res.cookie('sessionId',sessionIdCookie, { maxAge: 1000 * 60 * 60 * 48, httpOnly: false });
+						res.cookie('loggedUserName',req.body.user, { maxAge: 1000 * 60 * 60 * 48, httpOnly: false });
 						res.render("action_feedback", {message:"logged on, welcome"});
 						//res.json({key1:"val1"});
 					},
