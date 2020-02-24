@@ -73,10 +73,27 @@ exports.updateStat=function(req, res, next){
 }
 
 
+
 exports.settingGet = function(req, res, next) {     
   //res.render('user_login', {title:"Enter User Details"} );
   res.render('settings', {} );
 };
+
+
+exports.postLoadAllLang = function(req,res){
+	console.log("postLoadAllLang()");
+	
+	dbAccess.loadAllLanguage().
+	then(
+		function(dat){
+			res.json({loadedLang:JSON.stringify(dat)});
+		}
+	).catch(
+		function(err){
+			console.log("error at laoding languages" + err);
+		}
+	);
+}
 
 
 

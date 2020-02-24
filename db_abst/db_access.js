@@ -70,6 +70,11 @@ function loadUserStats(langCode, tage, userName){
 }
 
 
+function loadAllLanguage(){
+	return Language.find({}).exec();
+}
+
+
 //loads words of given parameters, paired with coressponding user stats, where avaliable 
 function loadAllWordsAndTheirAvlStat(langSymbol, userName, tages, handler){
 	async.parallel(
@@ -155,6 +160,8 @@ module.exports = {
 	loadWordsByLangCode:loadWordsByLangCode,
 	loadAllWordsAndTheirAvlStat:loadAllWordsAndTheirAvlStat,
 	insertUserStat:insertUserStat, 
-	updateUserStat:updateUserStat
-
+	updateUserStat:updateUserStat,
+	loadAllLanguage:loadAllLanguage
 }
+
+

@@ -15,6 +15,10 @@ router.post('/updateStat', play_controller.updateStat);
 
 router.get('/settings', play_controller.settingGet);
 
+router.post('/loadLangs', play_controller.postLoadAllLang);
+
+
+
 
 
 //router.post('/practiceLoop', );
