@@ -16,6 +16,7 @@ function setPanelUserLoggedOut(){
 function initDoc(){
 	console.log("initDoc()");
 	updateLoginStatus();
+	settingsFromCookies();
 }
 
 function updateLoginStatus(){

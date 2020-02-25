@@ -37,7 +37,7 @@ function handleLangSelect(){
 	var selLang= document.getElementById('combLang').value;
 	console.log("selected lang" + selLang);
 	gameState.srcLanguageCode= selLang;
-	document.cookie = "srcLang=" + selLang + "; expires= Thu, 21 Aug 2050 20:51:03 UTC";
+	document.cookie = "srcLang=" + selLang + "; expires= Thu, 21 Aug 2050 20:51:03 UTC; path=/";
 }
 
 

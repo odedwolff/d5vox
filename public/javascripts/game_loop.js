@@ -191,6 +191,19 @@ function enableCorrectButtons(flag){
 
 
 
+function settingsFromCookies(){
+	console.log("settingsFromCookies()");
+	var cookVal = getCookie("srcLang");
+	if(cookVal){
+		console.log("setting src lang from cookie" + cookVal);
+		gameState.srcLanguageCode=cookVal;
+	}else{
+		console.log("no source language cooke found");
+	}
+}
+
+
+
 
 
 
